@@ -1,0 +1,25 @@
+package broker
+
+const (
+	SendEmailEvent                     = "sendemail.created"
+	NewOnboardEvent                    = "newonboard.event"
+	ReviewOnboardEvent                 = "reviewonboard.event"
+	NewDailyOnboardEvent               = "newdailyonboard.event"
+	NewMonthlyOnboardEvent             = "newmonthlyonboard.event"
+	NegotiationOnboardEvent            = "negotiationonboard.event"
+	CompleteOnboardEvent               = "completeonboard.event"
+	CreateTransactionEvent             = "createtransaction.event"
+	SendSMSEvent                       = "sendsms.event"
+	AirtelCollectionTransactionEvent   = "airtelcollectiontransaction.event"
+	AirtelCollectionStatusEvent        = "airtelcollectionstatus.event"
+	AirtelDisbursementTransactionEvent = "airteldisbursementtransaction.event"
+	MTNCollectionTransactionEvent      = "mtncollectiontransaction.event"
+	MTNCollectionStatusEvent           = "mtncollectionstatus.event"
+	MTNDisbursementTransactionEvent    = "mtndisbursementtransaction.event"
+	MTNDisbursementStatusEvent         = "mtndisbursementstatus.event"
+	ZamtelCollectionTransactionEvent   = "zamtelcollectiontransaction.event"
+	ZamtelDisbursementTransactionEvent = "zamteldisbursementtransaction.event"
+	BankDisbursementTransactionEvent   = "bankdisbursementtransaction.event"
+	BatchTransactionEvent              = "batchtransaction.event"
+	UpdateTransactionEvent             = "updatetransaction.event"
+)
