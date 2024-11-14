@@ -14,27 +14,11 @@ type contctKey string
 
 const userKey contctKey = "userID"
 
-func CreateJWT(secret []byte, userID string, role string, jwtExpirationInSeconds int64) (string, error) {
+func CreateJWT(secret []byte, userID string, jwtExpirationInSeconds int64) (string, error) {
 	expiration := time.Now().Add(time.Second * time.Duration(jwtExpirationInSeconds))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userID":    userID,
-		"role":      role,
 		"expiresAt": expiration.Unix(),
-	})
-
-	tokenString, err := token.SignedString(secret)
-	if err != nil {
-		return "", err
-	}
-
-	return tokenString, nil
-}
-
-func CreateTransactionJWT(secret []byte, workspaceID string, jwtExpirationInSeconds int64) (string, error) {
-	expiration := time.Now().Add(time.Second * time.Duration(jwtExpirationInSeconds))
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"workspaceID": workspaceID,
-		"expiresAt":   expiration.Unix(),
 	})
 
 	tokenString, err := token.SignedString(secret)
