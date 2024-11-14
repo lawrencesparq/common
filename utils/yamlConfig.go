@@ -120,6 +120,12 @@ type Config struct {
 
 	//smtp key
 	SmtpKey string `yaml:"smtpKey"`
+
+	//cipher key
+	CipherKey string `yaml:"cipherKey"`
+
+	//cipher iv
+	CipherIv string `yaml:"cipherIv"`
 }
 
 // loadConfig loads app config from YAML file.

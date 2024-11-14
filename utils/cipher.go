@@ -9,9 +9,9 @@ import (
 )
 
 // GetAESDecrypted decrypts given text in AES 256 CBC
-func GetAESDecrypted(encrypted string) ([]byte, error) {
-	key := "murxSLwbaZsd9fPZzFnXDtTesfTxLVFT"
-	iv := "RFes2nb0673ZEqvM"
+func GetAESDecrypted(encrypted string, conf []byte) ([]byte, error) {
+	key := YamlString(LoadConfig(conf).CipherKey, "murxSLwbaZsd9fPZzFnXDtTesfTxLVFT")
+	iv := YamlString(LoadConfig(conf).CipherIv, "RFes2nb0673ZEqvM")
 
 	ciphertext, err := base64.StdEncoding.DecodeString(encrypted)
 
@@ -45,9 +45,9 @@ func PKCS5UnPadding(src []byte) []byte {
 }
 
 // GetAESEncrypted encrypts given text in AES 256 CBC
-func GetAESEncrypted(plaintext string) (string, error) {
-	key := "murxSLwbaZsd9fPZzFnXDtTesfTxLVFT"
-	iv := "RFes2nb0673ZEqvM"
+func GetAESEncrypted(plaintext string, conf []byte) (string, error) {
+	key := YamlString(LoadConfig(conf).CipherKey, "murxSLwbaZsd9fPZzFnXDtTesfTxLVFT")
+	iv := YamlString(LoadConfig(conf).CipherIv, "RFes2nb0673ZEqvM")
 
 	var plainTextBlock []byte
 	length := len(plaintext)

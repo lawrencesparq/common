@@ -13,8 +13,6 @@ import (
 type contctKey string
 
 const userKey contctKey = "userID"
-const roleKey contctKey = "role"
-const workspaceKey contctKey = "workspaceID"
 
 func CreateJWT(secret []byte, userID string, role string, jwtExpirationInSeconds int64) (string, error) {
 	expiration := time.Now().Add(time.Second * time.Duration(jwtExpirationInSeconds))
@@ -79,18 +77,16 @@ func WithJWTAuth(handlerFunc http.HandlerFunc, secret string) http.HandlerFunc {
 		}
 
 		str := claims["userID"].(string)
-		str2 := claims["role"].(string)
 
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, userKey, str)
-		ctx = context.WithValue(ctx, roleKey, str2)
 		r = r.WithContext(ctx)
 
 		handlerFunc(w, r)
 	}
 }
 
-func WithENCJWTAuth(handlerFunc http.HandlerFunc, secret string) http.HandlerFunc {
+func WithENCJWTAuth(handlerFunc http.HandlerFunc, secret string, conf []byte) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tokenString := getTokenFromReq(r)
 		const BEARER_SCHEME = "Bearer "
@@ -101,7 +97,7 @@ func WithENCJWTAuth(handlerFunc http.HandlerFunc, secret string) http.HandlerFun
 		}
 		newTokenString := tokenString[len(BEARER_SCHEME):]
 
-		newToken, err := GetAESDecrypted(newTokenString)
+		newToken, err := GetAESDecrypted(newTokenString, conf)
 		if err != nil {
 			log.Printf("Failed to create JWT token: %v", err)
 			permissionDenied(w, "permission denied")
@@ -128,10 +124,10 @@ func WithENCJWTAuth(handlerFunc http.HandlerFunc, secret string) http.HandlerFun
 			return
 		}
 
-		str := claims["workspaceID"].(string)
+		str := claims["userID"].(string)
 
 		ctx := r.Context()
-		ctx = context.WithValue(ctx, workspaceKey, str)
+		ctx = context.WithValue(ctx, userKey, str)
 		r = r.WithContext(ctx)
 
 		handlerFunc(w, r)
@@ -171,20 +167,4 @@ func GetUserIDFromCtx(ctx context.Context) string {
 		return ""
 	}
 	return userID
-}
-
-func GetRoleFromCtx(ctx context.Context) string {
-	role, ok := ctx.Value(roleKey).(string)
-	if !ok {
-		return ""
-	}
-	return role
-}
-
-func GetWorkspaceIDFromCtx(ctx context.Context) string {
-	workspaceID, ok := ctx.Value(workspaceKey).(string)
-	if !ok {
-		return ""
-	}
-	return workspaceID
 }
