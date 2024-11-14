@@ -49,14 +49,8 @@ type Config struct {
 	// database name.
 	DBName string `yaml:"dbName"`
 
-	// Merchant Jwt Secret.
-	MerchantJwtSecret string `yaml:"merchantJwtSecret"`
-
-	// backoffice Jwt Secret.
-	BackOfficeJwtSecret string `yaml:"backofficeJwtSecret"`
-
-	// transaction Jwt Secret.
-	TransactionJwtSecret string `yaml:"transactionJwtSecret"`
+	// Jwt Secret.
+	JwtSecret string `yaml:"jwtSecret"`
 
 	// grant type.
 	GrantType string `yaml:"grantType"`
