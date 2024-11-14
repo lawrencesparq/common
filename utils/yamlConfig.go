@@ -52,6 +52,9 @@ type Config struct {
 	// Jwt Secret.
 	JwtSecret string `yaml:"jwtSecret"`
 
+	// Jwt Exp.
+	JwtExp string `yaml:"jwtExp"`
+
 	// grant type.
 	GrantType string `yaml:"grantType"`
 
