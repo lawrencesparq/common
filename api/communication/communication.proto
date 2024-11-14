@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "github.com/lawrencesparq/common/api/communication";
+
+package api;
+
+message EmailRequest {
+    repeated string to = 1;
+    repeated string cc = 2;
+    string subject = 3;
+    string message = 4;
+}
+
+message Response {
+    string status = 1;
+    string message = 2;
+}
+
+service CommunicationService {
+    rpc SendEmail (EmailRequest) returns (Response);
+}
