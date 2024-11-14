@@ -1,4 +1,4 @@
-module commons
+module github.com/lawrencesparq/common
 
 go 1.23.3
 

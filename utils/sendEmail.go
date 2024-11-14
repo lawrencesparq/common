@@ -1,12 +1,13 @@
 package utils
 
 import (
-	"commons/api/communication"
-	"commons/broker"
 	"context"
 	"encoding/json"
 	"fmt"
 	"log"
+
+	"github.com/lawrencesparq/common/api/communication"
+	"github.com/lawrencesparq/common/broker"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"go.opentelemetry.io/otel"
