@@ -13,6 +13,7 @@ message RegistrationRequest {
     string city = 6;
     string address = 7;
     string password = 8;
+    bool IsTnCsChecked = 9;
 }
 
 message RegistrationResponse {
@@ -24,6 +25,7 @@ message LogInRequest {
     string email = 1;
     string password = 2;
     string ID = 3;
+    string otp = 4;
 }
 
 message UserDetails {
@@ -39,6 +41,10 @@ message UserDetails {
     bool isActive = 10;
 }
 
+message UserData {
+    repeated UserDetails data = 1;
+}
+
 message LogInResponse {
     string status = 1;
     string message = 2;
@@ -48,4 +54,11 @@ message LogInResponse {
 service UserService {
     rpc RegisterUser (RegistrationRequest) returns (RegistrationResponse);
     rpc LogInUser (LogInRequest) returns (LogInResponse);
+    rpc UserProfile (LogInRequest) returns (UserDetails);
+    rpc VerifyOTP (LogInRequest) returns (LogInResponse);
+    rpc ResetUserPassword (LogInRequest) returns (LogInResponse);
+    rpc CloseAccount (LogInRequest) returns (LogInResponse);
+    rpc ActivateAccount (LogInRequest) returns (LogInResponse);
+    rpc EditUserDetails (RegistrationRequest) returns (RegistrationResponse);
+    rpc BackOfficeUsers (LogInRequest) returns (UserData);
 }

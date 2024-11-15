@@ -19,8 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_RegisterUser_FullMethodName = "/api.UserService/RegisterUser"
-	UserService_LogInUser_FullMethodName    = "/api.UserService/LogInUser"
+	UserService_RegisterUser_FullMethodName      = "/api.UserService/RegisterUser"
+	UserService_LogInUser_FullMethodName         = "/api.UserService/LogInUser"
+	UserService_UserProfile_FullMethodName       = "/api.UserService/UserProfile"
+	UserService_VerifyOTP_FullMethodName         = "/api.UserService/VerifyOTP"
+	UserService_ResetUserPassword_FullMethodName = "/api.UserService/ResetUserPassword"
+	UserService_CloseAccount_FullMethodName      = "/api.UserService/CloseAccount"
+	UserService_ActivateAccount_FullMethodName   = "/api.UserService/ActivateAccount"
+	UserService_EditUserDetails_FullMethodName   = "/api.UserService/EditUserDetails"
+	UserService_BackOfficeUsers_FullMethodName   = "/api.UserService/BackOfficeUsers"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -29,6 +36,13 @@ const (
 type UserServiceClient interface {
 	RegisterUser(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
 	LogInUser(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
+	UserProfile(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*UserDetails, error)
+	VerifyOTP(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
+	ResetUserPassword(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
+	CloseAccount(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
+	ActivateAccount(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
+	EditUserDetails(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
+	BackOfficeUsers(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*UserData, error)
 }
 
 type userServiceClient struct {
@@ -59,12 +73,89 @@ func (c *userServiceClient) LogInUser(ctx context.Context, in *LogInRequest, opt
 	return out, nil
 }
 
+func (c *userServiceClient) UserProfile(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*UserDetails, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserDetails)
+	err := c.cc.Invoke(ctx, UserService_UserProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) VerifyOTP(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogInResponse)
+	err := c.cc.Invoke(ctx, UserService_VerifyOTP_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) ResetUserPassword(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogInResponse)
+	err := c.cc.Invoke(ctx, UserService_ResetUserPassword_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) CloseAccount(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogInResponse)
+	err := c.cc.Invoke(ctx, UserService_CloseAccount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) ActivateAccount(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogInResponse)
+	err := c.cc.Invoke(ctx, UserService_ActivateAccount_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) EditUserDetails(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RegistrationResponse)
+	err := c.cc.Invoke(ctx, UserService_EditUserDetails_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) BackOfficeUsers(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*UserData, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserData)
+	err := c.cc.Invoke(ctx, UserService_BackOfficeUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
 type UserServiceServer interface {
 	RegisterUser(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
 	LogInUser(context.Context, *LogInRequest) (*LogInResponse, error)
+	UserProfile(context.Context, *LogInRequest) (*UserDetails, error)
+	VerifyOTP(context.Context, *LogInRequest) (*LogInResponse, error)
+	ResetUserPassword(context.Context, *LogInRequest) (*LogInResponse, error)
+	CloseAccount(context.Context, *LogInRequest) (*LogInResponse, error)
+	ActivateAccount(context.Context, *LogInRequest) (*LogInResponse, error)
+	EditUserDetails(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
+	BackOfficeUsers(context.Context, *LogInRequest) (*UserData, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -80,6 +171,27 @@ func (UnimplementedUserServiceServer) RegisterUser(context.Context, *Registratio
 }
 func (UnimplementedUserServiceServer) LogInUser(context.Context, *LogInRequest) (*LogInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LogInUser not implemented")
+}
+func (UnimplementedUserServiceServer) UserProfile(context.Context, *LogInRequest) (*UserDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserProfile not implemented")
+}
+func (UnimplementedUserServiceServer) VerifyOTP(context.Context, *LogInRequest) (*LogInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyOTP not implemented")
+}
+func (UnimplementedUserServiceServer) ResetUserPassword(context.Context, *LogInRequest) (*LogInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResetUserPassword not implemented")
+}
+func (UnimplementedUserServiceServer) CloseAccount(context.Context, *LogInRequest) (*LogInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CloseAccount not implemented")
+}
+func (UnimplementedUserServiceServer) ActivateAccount(context.Context, *LogInRequest) (*LogInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ActivateAccount not implemented")
+}
+func (UnimplementedUserServiceServer) EditUserDetails(context.Context, *RegistrationRequest) (*RegistrationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditUserDetails not implemented")
+}
+func (UnimplementedUserServiceServer) BackOfficeUsers(context.Context, *LogInRequest) (*UserData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BackOfficeUsers not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 func (UnimplementedUserServiceServer) testEmbeddedByValue()                     {}
@@ -138,6 +250,132 @@ func _UserService_LogInUser_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_UserProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UserProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_UserProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UserProfile(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_VerifyOTP_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).VerifyOTP(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_VerifyOTP_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).VerifyOTP(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_ResetUserPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).ResetUserPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_ResetUserPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ResetUserPassword(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_CloseAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).CloseAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_CloseAccount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).CloseAccount(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_ActivateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).ActivateAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_ActivateAccount_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ActivateAccount(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_EditUserDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegistrationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).EditUserDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_EditUserDetails_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).EditUserDetails(ctx, req.(*RegistrationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_BackOfficeUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).BackOfficeUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_BackOfficeUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).BackOfficeUsers(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +390,34 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LogInUser",
 			Handler:    _UserService_LogInUser_Handler,
+		},
+		{
+			MethodName: "UserProfile",
+			Handler:    _UserService_UserProfile_Handler,
+		},
+		{
+			MethodName: "VerifyOTP",
+			Handler:    _UserService_VerifyOTP_Handler,
+		},
+		{
+			MethodName: "ResetUserPassword",
+			Handler:    _UserService_ResetUserPassword_Handler,
+		},
+		{
+			MethodName: "CloseAccount",
+			Handler:    _UserService_CloseAccount_Handler,
+		},
+		{
+			MethodName: "ActivateAccount",
+			Handler:    _UserService_ActivateAccount_Handler,
+		},
+		{
+			MethodName: "EditUserDetails",
+			Handler:    _UserService_EditUserDetails_Handler,
+		},
+		{
+			MethodName: "BackOfficeUsers",
+			Handler:    _UserService_BackOfficeUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
