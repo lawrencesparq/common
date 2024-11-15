@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option go_package = "github.com/lawrencesparq/common/api/dropdowns";
+
+package api;
+
+message DropDownRequest {
+
+}
+
+message ProvinceCityResponse {
+    message Provinces {
+        message Cities {
+            int64 ID = 1;
+            string city = 2;
+        }
+        int64 ID = 1;
+        string province = 2;
+        repeated Cities cities = 3;
+    }
+
+    repeated Provinces provinces = 1;
+}
+
+service DropDownService {
+    rpc ProvinceCityDropDown (DropDownRequest) returns (ProvinceCityResponse);
+}
