@@ -14,6 +14,7 @@ message RegistrationRequest {
     string address = 7;
     string password = 8;
     bool IsTnCsChecked = 9;
+    string ID = 10;
 }
 
 message RegistrationResponse {
