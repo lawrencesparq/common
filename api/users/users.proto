@@ -39,6 +39,13 @@ message UserDetails {
     string password = 8;
     bool changePassword = 9;
     bool isActive = 10;
+    bool IsTnCsChecked = 11;
+    int64 loginAttempts = 12;
+    bool isLocked = 13;
+    string otp_expiry_date = 14;
+    string last_login_date = 15;
+    string last_password_change = 16;
+    bool sendNewsLetter = 17;
 }
 
 message UserData {
