@@ -49,6 +49,7 @@ message UserDetails {
     string phone_number = 18;
     int64 provinceID = 19;
     int64 cityID = 20;
+    string otp = 21;
 }
 
 message UserData {
