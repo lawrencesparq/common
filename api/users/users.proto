@@ -47,6 +47,8 @@ message UserDetails {
     string last_password_change = 16;
     bool sendNewsLetter = 17;
     string phone_number = 18;
+    int64 provinceID = 19;
+    int64 cityID = 20;
 }
 
 message UserData {
