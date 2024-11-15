@@ -50,6 +50,8 @@ message UserDetails {
     int64 provinceID = 19;
     int64 cityID = 20;
     string otp = 21;
+    string created_at = 22;
+    string updated_at = 23;
 }
 
 message UserData {
