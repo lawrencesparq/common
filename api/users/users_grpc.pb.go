@@ -22,6 +22,7 @@ const (
 	UserService_RegisterUser_FullMethodName      = "/api.UserService/RegisterUser"
 	UserService_LogInUser_FullMethodName         = "/api.UserService/LogInUser"
 	UserService_UserProfile_FullMethodName       = "/api.UserService/UserProfile"
+	UserService_VerifyEmail_FullMethodName       = "/api.UserService/VerifyEmail"
 	UserService_VerifyOTP_FullMethodName         = "/api.UserService/VerifyOTP"
 	UserService_ResetUserPassword_FullMethodName = "/api.UserService/ResetUserPassword"
 	UserService_CloseAccount_FullMethodName      = "/api.UserService/CloseAccount"
@@ -37,6 +38,7 @@ type UserServiceClient interface {
 	RegisterUser(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
 	LogInUser(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
 	UserProfile(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*UserDetails, error)
+	VerifyEmail(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
 	VerifyOTP(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
 	ResetUserPassword(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
 	CloseAccount(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
@@ -77,6 +79,16 @@ func (c *userServiceClient) UserProfile(ctx context.Context, in *LogInRequest, o
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UserDetails)
 	err := c.cc.Invoke(ctx, UserService_UserProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) VerifyEmail(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogInResponse)
+	err := c.cc.Invoke(ctx, UserService_VerifyEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,6 +162,7 @@ type UserServiceServer interface {
 	RegisterUser(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
 	LogInUser(context.Context, *LogInRequest) (*LogInResponse, error)
 	UserProfile(context.Context, *LogInRequest) (*UserDetails, error)
+	VerifyEmail(context.Context, *LogInRequest) (*LogInResponse, error)
 	VerifyOTP(context.Context, *LogInRequest) (*LogInResponse, error)
 	ResetUserPassword(context.Context, *LogInRequest) (*LogInResponse, error)
 	CloseAccount(context.Context, *LogInRequest) (*LogInResponse, error)
@@ -174,6 +187,9 @@ func (UnimplementedUserServiceServer) LogInUser(context.Context, *LogInRequest) 
 }
 func (UnimplementedUserServiceServer) UserProfile(context.Context, *LogInRequest) (*UserDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserProfile not implemented")
+}
+func (UnimplementedUserServiceServer) VerifyEmail(context.Context, *LogInRequest) (*LogInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyEmail not implemented")
 }
 func (UnimplementedUserServiceServer) VerifyOTP(context.Context, *LogInRequest) (*LogInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyOTP not implemented")
@@ -264,6 +280,24 @@ func _UserService_UserProfile_Handler(srv interface{}, ctx context.Context, dec 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).UserProfile(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_VerifyEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).VerifyEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_VerifyEmail_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).VerifyEmail(ctx, req.(*LogInRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -394,6 +428,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UserProfile",
 			Handler:    _UserService_UserProfile_Handler,
+		},
+		{
+			MethodName: "VerifyEmail",
+			Handler:    _UserService_VerifyEmail_Handler,
 		},
 		{
 			MethodName: "VerifyOTP",
