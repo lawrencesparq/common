@@ -46,6 +46,7 @@ message UserDetails {
     string last_login_date = 15;
     string last_password_change = 16;
     bool sendNewsLetter = 17;
+    string phone_number = 18;
 }
 
 message UserData {
