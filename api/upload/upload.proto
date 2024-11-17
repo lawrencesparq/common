@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = "github.com/lawrencesparq/common/api/upload";
+
+package api;
+
+message UploadRequest {
+    string ID = 1;
+    string file_name = 2;
+    string type = 3;
+    string extension = 4;
+    string file_size = 5;
+    string url = 6;
+    string collection_id = 7;
+}
+
+message UploadResponse {
+    string status = 1;
+    string message = 2;
+}
+
+service UploadService {
+    rpc UploadFile (UploadRequest) returns (UploadResponse);
+    rpc DeleteFile (UploadRequest) returns (UploadResponse);
+    rpc EditFile (UploadRequest) returns (UploadResponse);
+}

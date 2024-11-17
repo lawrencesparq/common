@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option go_package = "github.com/lawrencesparq/common/api/setup";
+
+package api;
+
+message SetupRequest {
+    string userID = 1;
+}
+
+message SetupUserDetails {
+    string ID = 1;
+    string first_name = 2;
+    string last_name = 3;
+    string email = 4;
+    string province = 5;
+    string city = 6;
+    string address = 7;
+    string password = 8;
+    bool changePassword = 9;
+    bool isActive = 10;
+    bool IsTnCsChecked = 11;
+    int64 loginAttempts = 12;
+    bool isLocked = 13;
+    string otp_expiry_date = 14;
+    string last_login_date = 15;
+    string last_password_change = 16;
+    bool sendNewsLetter = 17;
+    string phone_number = 18;
+    int64 provinceID = 19;
+    int64 cityID = 20;
+    string otp = 21;
+    string created_at = 22;
+    string updated_at = 23;
+}
+
+message SetupUserRoleAndPermissions {
+
+}
+
+message SetupResponse {
+    SetupUserDetails details = 1;
+    SetupUserRoleAndPermissions role = 2;
+}
+
+service SetupService {
+    rpc UserSetup (SetupRequest) returns (SetupResponse);
+}

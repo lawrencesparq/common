@@ -68,6 +68,7 @@ message LogInResponse {
 service UserService {
     rpc RegisterUser (RegistrationRequest) returns (RegistrationResponse);
     rpc LogInUser (LogInRequest) returns (LogInResponse);
+    rpc UserTokenRefresh (LogInRequest) returns (LogInResponse);
     rpc UserProfile (LogInRequest) returns (UserDetails);
     rpc VerifyEmail (LogInRequest) returns (LogInResponse);
     rpc VerifyOTP (LogInRequest) returns (LogInResponse);

@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	UserService_RegisterUser_FullMethodName      = "/api.UserService/RegisterUser"
 	UserService_LogInUser_FullMethodName         = "/api.UserService/LogInUser"
+	UserService_UserTokenRefresh_FullMethodName  = "/api.UserService/UserTokenRefresh"
 	UserService_UserProfile_FullMethodName       = "/api.UserService/UserProfile"
 	UserService_VerifyEmail_FullMethodName       = "/api.UserService/VerifyEmail"
 	UserService_VerifyOTP_FullMethodName         = "/api.UserService/VerifyOTP"
@@ -37,6 +38,7 @@ const (
 type UserServiceClient interface {
 	RegisterUser(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
 	LogInUser(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
+	UserTokenRefresh(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
 	UserProfile(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*UserDetails, error)
 	VerifyEmail(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
 	VerifyOTP(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error)
@@ -69,6 +71,16 @@ func (c *userServiceClient) LogInUser(ctx context.Context, in *LogInRequest, opt
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LogInResponse)
 	err := c.cc.Invoke(ctx, UserService_LogInUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) UserTokenRefresh(ctx context.Context, in *LogInRequest, opts ...grpc.CallOption) (*LogInResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LogInResponse)
+	err := c.cc.Invoke(ctx, UserService_UserTokenRefresh_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -161,6 +173,7 @@ func (c *userServiceClient) BackOfficeUsers(ctx context.Context, in *LogInReques
 type UserServiceServer interface {
 	RegisterUser(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
 	LogInUser(context.Context, *LogInRequest) (*LogInResponse, error)
+	UserTokenRefresh(context.Context, *LogInRequest) (*LogInResponse, error)
 	UserProfile(context.Context, *LogInRequest) (*UserDetails, error)
 	VerifyEmail(context.Context, *LogInRequest) (*LogInResponse, error)
 	VerifyOTP(context.Context, *LogInRequest) (*LogInResponse, error)
@@ -184,6 +197,9 @@ func (UnimplementedUserServiceServer) RegisterUser(context.Context, *Registratio
 }
 func (UnimplementedUserServiceServer) LogInUser(context.Context, *LogInRequest) (*LogInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LogInUser not implemented")
+}
+func (UnimplementedUserServiceServer) UserTokenRefresh(context.Context, *LogInRequest) (*LogInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserTokenRefresh not implemented")
 }
 func (UnimplementedUserServiceServer) UserProfile(context.Context, *LogInRequest) (*UserDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserProfile not implemented")
@@ -262,6 +278,24 @@ func _UserService_LogInUser_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).LogInUser(ctx, req.(*LogInRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_UserTokenRefresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LogInRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UserTokenRefresh(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_UserTokenRefresh_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UserTokenRefresh(ctx, req.(*LogInRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -424,6 +458,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LogInUser",
 			Handler:    _UserService_LogInUser_Handler,
+		},
+		{
+			MethodName: "UserTokenRefresh",
+			Handler:    _UserService_UserTokenRefresh_Handler,
 		},
 		{
 			MethodName: "UserProfile",
