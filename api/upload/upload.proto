@@ -11,7 +11,7 @@ message UploadRequest {
     string extension = 4;
     string file_size = 5;
     string url = 6;
-    string collection_id = 7;
+    string record_id = 7;
 }
 
 message UploadResponse {
