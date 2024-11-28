@@ -27,7 +27,7 @@ import (
 	"github.com/nfnt/resize"
 )
 
-func GetVerticalCard(url string, ext string) core.Maroto {
+func GetVerticalCard(url, ext, fullname, message, date, time, qrMessage string) core.Maroto {
 	response, e := http.Get(url)
 	if e != nil {
 		log.Fatal(e)
@@ -84,7 +84,7 @@ func GetVerticalCard(url string, ext string) core.Maroto {
 		if err != nil {
 			fmt.Println("failed to create buffer", err)
 		}
-		exten = extension.Jpeg
+		exten = extension.Png
 	}
 
 	// Copy into buffer.
@@ -114,12 +114,12 @@ func GetVerticalCard(url string, ext string) core.Maroto {
 	if err != nil {
 		log.Fatal(err)
 	}
-	m.AddPages(addVerticalPage())
+	m.AddPages(addVerticalPage(fullname, message, date, time, qrMessage))
 
 	return m
 }
 
-func GetHorizontalCard(url string, ext string) core.Maroto {
+func GetHorizontalCard(url, ext, fullname, message, date, time, qrMessage string) core.Maroto {
 	response, e := http.Get(url)
 	if e != nil {
 		log.Fatal(e)
@@ -199,17 +199,17 @@ func GetHorizontalCard(url string, ext string) core.Maroto {
 	mrt := maroto.New(b.Build())
 	m := maroto.NewMetricsDecorator(mrt)
 
-	m.AddPages(addHorizontalPage(buff.Bytes()))
+	m.AddPages(addHorizontalPage(buff.Bytes(), fullname, message, date, time, qrMessage))
 
 	return m
 }
 
-func addVerticalPage() core.Page {
+func addVerticalPage(fullname, message, date, time, qrMessage string) core.Page {
 	return page.New().Add(
 		row.New(82),
 		row.New(10).Add(
 			col.New(4),
-			text.NewCol(12, "John Doe", props.Text{
+			text.NewCol(12, fullname, props.Text{
 				Size:   15,
 				Align:  align.Center,
 				Style:  fontstyle.Bold,
@@ -218,7 +218,7 @@ func addVerticalPage() core.Page {
 			col.New(4),
 		),
 		row.New(20).Add(
-			text.NewCol(20, "You're warmly invited to our event, this is a sample invitation message You're warmly invited to our event, this is a sample invitation message You're warmly invited to our event, this is a sample invitation message", props.Text{
+			text.NewCol(20, message, props.Text{
 				Style:  fontstyle.Normal,
 				Size:   10,
 				Left:   5,
@@ -230,7 +230,7 @@ func addVerticalPage() core.Page {
 		),
 		row.New(10).Add(
 			col.New(4),
-			text.NewCol(12, "Date and times for the event", props.Text{
+			text.NewCol(12, date+" @ "+time, props.Text{
 				Size:   10,
 				Align:  align.Center,
 				Style:  fontstyle.Bold,
@@ -240,7 +240,7 @@ func addVerticalPage() core.Page {
 		),
 		row.New(30).Add(
 			code.NewQrCol(20,
-				fmt.Sprintln("Hello there, This is a sample QR code."),
+				fmt.Sprintln(qrMessage),
 				props.Rect{
 					Center:  true,
 					Percent: 100,
@@ -262,11 +262,11 @@ func addVerticalPage() core.Page {
 	)
 }
 
-func addHorizontalPage(ft []byte) core.Page {
+func addHorizontalPage(ft []byte, fullname, message, date, time, qrMessage string) core.Page {
 	return page.New().Add(
 		row.New(20).Add(
 			col.New(8),
-			text.NewCol(12, "John Doe", props.Text{
+			text.NewCol(12, fullname, props.Text{
 				Size:   15,
 				Align:  align.Center,
 				Style:  fontstyle.Bold,
@@ -276,7 +276,7 @@ func addHorizontalPage(ft []byte) core.Page {
 		),
 		row.New(20).Add(
 			col.New(8),
-			text.NewCol(12, "You're warmly invited to our event, this is a sample invitation message You're warmly invited to our event, this is a sample invitation message You're warmly invited to our event, this is a sample invitation message", props.Text{
+			text.NewCol(12, message, props.Text{
 				Style:  fontstyle.Normal,
 				Size:   10,
 				Left:   5,
@@ -288,7 +288,7 @@ func addHorizontalPage(ft []byte) core.Page {
 		),
 		row.New(10).Add(
 			col.New(8),
-			text.NewCol(12, "Date and times for the event", props.Text{
+			text.NewCol(12, date+" @ "+time, props.Text{
 				Size:   10,
 				Align:  align.Center,
 				Style:  fontstyle.Bold,
@@ -298,7 +298,7 @@ func addHorizontalPage(ft []byte) core.Page {
 		row.New(35).Add(
 			col.New(8),
 			code.NewQrCol(12,
-				fmt.Sprintln("Hello there, This is a sample QR code."),
+				fmt.Sprintln(qrMessage),
 				props.Rect{
 					Center:  true,
 					Percent: 100,
